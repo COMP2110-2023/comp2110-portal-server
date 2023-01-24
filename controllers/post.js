@@ -24,6 +24,7 @@ const createPost = async (request, response) => {
 const getPosts = async (request, response) => {
  
         const posts = await models.Post.find()
+                .populate('creator')
                 .sort('timestamp')
         response.json({posts}) 
 }

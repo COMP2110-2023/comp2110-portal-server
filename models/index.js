@@ -8,7 +8,16 @@ const userSchema = new mongoose.Schema({
     data: Object,
   })
 
+userSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    delete returnedObject._id
+    delete returnedObject.__v
+    delete returnedObject.password
+  }
+})
+
 const User = mongoose.model('User', userSchema)
+
 
 const sessionSchema = new mongoose.Schema({
     username: {type: String, unique: true},   // enforce one session per user
@@ -24,7 +33,14 @@ const postSchema = new mongoose.Schema({
     creator: {type: mongoose.Types.ObjectId, ref: 'User'},
     content: String
   })
-
+postSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = document._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+  
 const Post = mongoose.model('Post', postSchema)
 
 const initDB = async () => {
