@@ -1,0 +1,30 @@
+{
+  "name": "comp2110-portal-server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "connect-mongodb-session": "^3.1.1",
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "dotenv": "^16.0.3",
+    "express": "~4.16.1",
+    "express-session": "^1.17.3",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "mongoose": "^6.8.4",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^28.1.2",
+    "mongodb-memory-server": "^8.7.2",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.2.4"
+  }
+}

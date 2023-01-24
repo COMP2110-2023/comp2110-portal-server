@@ -1,0 +1,8 @@
+POST http://localhost:8102/blog/
+Authorization: basic a3908595-9cee-457f-b3fb-900b87863869
+Content-Type: application/json
+
+{
+    "title": "veniam sit adipisicing ea et",
+    "content": "Ea irure aute minim aliqua consequat. Sint est occaecat est eiusmod eu ad est anim magna incididunt. Officia elit id velit et incididunt. Veniam culpa irure aliqua occaecat nisi exercitation sunt culpa non et exercitation officia. Ad aliqua magna magna ad adipisicing exercitation mollit elit eu cillum culpa Lorem. Dolore excepteur voluptate ea ullamco ex pariatur nisi cupidatat laboris magna. Ullamco est reprehenderit nisi consectetur proident nulla qui ipsum dolor in in deserunt deserunt.\r\nSint occaecat commodo tempor proident occaecat. Non minim est sint voluptate. Reprehenderit dolore fugiat enim nostrud dolor ea consequat non esse. Eiusmod et culpa velit fugiat occaecat enim fugiat nulla non. Lorem ea labore dolor duis mollit duis velit commodo sit ipsum aliqua anim. Nostrud ad esse commodo et esse.\r\nSunt labore fugiat officia velit commodo exercitation ut est elit consequat ullamco aliqua quis. Magna ex occaecat occaecat tempor esse ipsum magna. Enim est nulla id ullamco incididunt. In excepteur nulla exercitation eu ex et dolore nisi ut ea magna cupidatat. Amet sunt reprehenderit ex deserunt aliquip est reprehenderit.\r\n"
+}

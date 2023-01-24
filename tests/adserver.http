@@ -1,0 +1,2 @@
+GET http://localhost:8102/adserver
+Referer: http://localhost:8102/bar
