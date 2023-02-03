@@ -22,21 +22,37 @@ describe('auth', () => {
     })
 
     beforeEach( async () => {
+        
     })
 
-    test('post to login', async () => {
-        await api.post('/users/login')
-            .send({username: 'bobalooba', password: 'bob'})
-            .expect(200)
-            .expect('Content-Type', /application\/json/)
-            .expect((response) => {
-                expect(response.body.name).toBe('Bob Bobalooba')
-                expect(response.body.username).toBe('bobalooba')
-                expect(response.body.token).not.toBeNull()
-            }) 
+    test('create post not authorised', async () => {
+        await api.post('/blog/')
+            .send({title: 'Test Post', content: 'Test Post Content'})
+            .expect(401)
     });
 
+    test('create post authorised', async () => {
+        let token;
+        await api.post('/users/login')
+            .send({username: 'bobalooba', password: 'bob'})
+            .expect(response => {
+                token = response.body.token
+            })
+
+        console.log('token', token);
+
+        await api.post('/blog/')
+            .send({title: 'Test Post', content: 'Test Post Content'})
+            .set('Authorization', `basic ${token}`)
+            .expect(200)
+            .expect(response => {
+                expect(response.body.status).toBe('success');
+            })
+    });
+
+
     afterAll(() => {
+        models.closeDB();
     })
 
 })

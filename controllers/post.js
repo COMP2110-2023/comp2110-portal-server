@@ -8,11 +8,11 @@ const createPost = async (request, response) => {
     if (creator) {
         const content = request.body.content;
         const title = request.body.title;
-        const post = new models.Post({creator, content, title});
-        const returned = await post.save();
+        const postID = await models.createPost(title, content, creator.username);
 
-        if (returned) {
-            response.json({status: "success", id: returned._id})
+        console.log("post:", postID)
+        if (postID) {
+            response.json({status: "success", id: postID})
         } else {
             response.json({status: "error"})
         }
@@ -23,16 +23,15 @@ const createPost = async (request, response) => {
 
 const getPosts = async (request, response) => {
  
-        const posts = await models.Post.find()
-                .populate('creator')
-                .sort('timestamp')
-        response.json({posts}) 
+        const posts = await models.getPosts(10);
+        console.log('posts', posts)
+        response.json({posts});
 }
 
 const getPost = async (request, response) => {
 
     const msgid = request.params.id
-    const result = await models.Post.findById(msgid).populate('creator')
+    const result = await models.getPost(msgid)
     if (result) {
         response.json(result)
     } else {

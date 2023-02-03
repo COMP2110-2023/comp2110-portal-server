@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session')
-var MongoDBStore = require('connect-mongodb-session')(session);
+var SQLiteStore = require('connect-sqlite3')(session);
 var cors = require('cors');
 var config = require('./config');
 
@@ -15,9 +15,9 @@ var adRouter = require('./routes/advertising');
 
 var app = express();
 
-var sessionStore = new MongoDBStore({
-  uri: config.mongoDBUrl,
-  collection: 'adSessions'
+var sessionStore = new SQLiteStore({
+  db:'database.db',
+  table:'cookieSessions'
 });
 
 // Catch errors
