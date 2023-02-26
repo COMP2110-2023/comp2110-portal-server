@@ -8,6 +8,7 @@ var SQLiteStore = require('connect-sqlite3')(session);
 var cors = require('cors');
 var config = require('./config');
 
+var models = require('./models');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var blogRouter = require('./routes/blog');
@@ -15,10 +16,9 @@ var adRouter = require('./routes/advertising');
 
 var app = express();
 
-const DB_DIR = process.env.DB_DIR ? process.env.DB_DIR : '.';
 
 var sessionStore = new SQLiteStore({
-  db: DB_DIR + '/database.db',
+  db: models.DB_DIR + '/database.db',
   table:'cookieSessions'
 });
 

@@ -6,11 +6,12 @@ const bcrypt = require('bcrypt');
 
 let db;
 
+const DB_DIR = process.env.DB_DIR ? process.env.DB_DIR : '.';
 
 const initDB = async () => {
   // open the database
   db = await open({
-    filename: './database.db',
+    filename: DB_DIR + '/database.db',
     driver: sqlite3.Database
   })
   return db;
@@ -133,6 +134,7 @@ const getPost = async (id) => {
 }
 
 module.exports = { 
+  DB_DIR,
   initDB, 
   closeDB,
   createTables, 
