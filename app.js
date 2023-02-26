@@ -18,7 +18,7 @@ var app = express();
 
 
 var sessionStore = new SQLiteStore({
-  db: models.DB_DIR + '/database.db',
+  db: models.DB_DIR + '/sessions.db',
   table:'cookieSessions'
 });
 

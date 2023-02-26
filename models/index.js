@@ -10,6 +10,7 @@ const DB_DIR = process.env.DB_DIR ? process.env.DB_DIR : '.';
 
 const initDB = async () => {
   // open the database
+  console.log('opening database at:', DB_DIR + '/database.db');
   db = await open({
     filename: DB_DIR + '/database.db',
     driver: sqlite3.Database
