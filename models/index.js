@@ -23,23 +23,23 @@ const closeDB = async () => {
 }
 
 const createTables = async () => {
-  await db.exec('DROP TABLE IF EXISTS users');
-  await db.exec(`CREATE TABLE users (
+  // await db.exec('DROP TABLE IF EXISTS users');
+  await db.exec(`CREATE TABLE IF NOT EXISTS users (
     username TEXT unique primary key,
     name TEXT,
     password TEXT,
     data TEXT
         )`);
 
-  await db.exec('DROP TABLE IF EXISTS sessions');
-  await db.exec(`CREATE TABLE sessions (
+  // await db.exec('DROP TABLE IF EXISTS sessions');
+  await db.exec(`CREATE TABLE IF NOT EXISTS sessions (
     key TEXT,
     username TEXT,
     FOREIGN KEY(username) REFERENCES users(username)
   )`);
 
-  await db.exec('DROP TABLE IF EXISTS posts');
-  await db.exec(`CREATE TABLE posts (
+  // await db.exec('DROP TABLE IF EXISTS posts');
+  await db.exec(`CREATE TABLE IF NOT EXISTS posts (
     title TEXT,
     content TEXT,
     timestamp INTEGER,
@@ -50,6 +50,11 @@ const createTables = async () => {
 
 
 const createUser = async (userinfo) => {
+
+  const user = getUser(userinfo.username);
+  if (user) {
+    return user.id;
+  }
 
   const hash = await bcrypt.hash(userinfo.password, config.saltRounds)
   const result = await db.run(
@@ -63,6 +68,7 @@ const getUser = async (username) => {
   const result = await db.get(
     'SELECT username, name, password, data FROM users WHERE username=?',
     username)
+  console.log(result);
   return result;
 }
 
