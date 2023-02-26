@@ -15,8 +15,10 @@ var adRouter = require('./routes/advertising');
 
 var app = express();
 
+const DB_DIR = process.env.DB_DIR ? process.env.DB_DIR : '.';
+
 var sessionStore = new SQLiteStore({
-  db:'database.db',
+  db: DB_DIR + '/database.db',
   table:'cookieSessions'
 });
 

@@ -7,9 +7,14 @@ processes = []
 
 [env]
   PORT = "8080"
+  DB_DIR = "/data"
 
 [experimental]
   auto_rollback = true
+
+[mounts]
+source="database"
+destination="/data"
 
 [[services]]
   http_checks = []
