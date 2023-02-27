@@ -1,7 +1,5 @@
-const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-const auth = require('../controllers/auth')
 const models = require('../models')
  
 

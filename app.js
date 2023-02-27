@@ -3,30 +3,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var session = require('express-session')
-var SQLiteStore = require('connect-sqlite3')(session);
-var cors = require('cors');
-var config = require('./config');
+var cors = require('cors'); 
 
-var models = require('./models');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var blogRouter = require('./routes/blog');
-var adRouter = require('./routes/advertising');
+var adRouter = require('./routes/advertising'); 
+var {sessionMiddleware} = require('./sessions')
 
 var app = express();
-
-
-var sessionStore = new SQLiteStore({
-  dir: models.DB_DIR,
-  db: 'database.db',
- table:'cookieSessions'
-});
-
-// Catch errors
-sessionStore.on('error', function(error) {
-  console.log(error);
-});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -38,16 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({
-  path: '/adserver',
-  secret: config.sessionSecret,
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
-  },
-  store: sessionStore,
-  resave: true,
-  saveUninitialized: true
-}));
+app.use(sessionMiddleware);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

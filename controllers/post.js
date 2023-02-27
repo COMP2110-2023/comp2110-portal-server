@@ -9,8 +9,7 @@ const createPost = async (request, response) => {
         const content = request.body.content;
         const title = request.body.title;
         const postID = await models.createPost(title, content, creator.username);
-
-        console.log("post:", postID)
+ 
         if (postID) {
             response.json({status: "success", id: postID})
         } else {
@@ -23,8 +22,7 @@ const createPost = async (request, response) => {
 
 const getPosts = async (request, response) => {
  
-        const posts = await models.getPosts(10);
-        console.log('posts', posts)
+        const posts = await models.getPosts(10); 
         response.json({posts});
 }
 

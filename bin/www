@@ -4,13 +4,13 @@
  * Module dependencies.
  */
 
+
 var app = require('../app');
 var debug = require('debug')('comp2110-portal-server:server');
 var http = require('http');
+var models = require('../models')
 
-var models = require('../models');
 models.initDB();
-
 
 /**
  * Get port from environment and store in Express.

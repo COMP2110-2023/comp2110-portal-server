@@ -7,23 +7,33 @@ const {randomInt} = require('crypto');
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
+const models = require('../models');
+const cookie = require('cookie');
+const {COOKIE} = require('../sessions');
 
-router.get('/', (request, response) => {
+router.get('/', async (request, response) => {
+
+    const referer = request.headers.referer;
+    const {sessionID, session} = await models.getOrCreateCookieSession(request.sessionID);;
+
     if (request.headers.referer) {
-        const referer = request.headers.referer;
-        if (request.session.sites) {
-            const entry = request.session.sites;
+        if ('sites' in session) {
+            const entry = session.sites;
             if (referer in entry) {
                 entry[referer] += 1;
             } else {
                 entry[referer] = 1;
             }
-            request.session.sites = entry;
+            session.sites = entry;
         } else {
-            request.session.sites = {};
-            request.session.sites[referer] = 1;
+            session.sites = {};
+            session.sites[referer] = 1;
         }
+        await models.updateCookieSession(sessionID, session);
     }
+    const cookieHeader = cookie.serialize(COOKIE, sessionID, {sameSite: "none", secure: true});
+    response.setHeader('Set-Cookie', cookieHeader);
+
     // select an image
     const images = fs.readdirSync('public/images/ad-images/');
     const choice = images[randomInt(images.length)];    
@@ -32,9 +42,11 @@ router.get('/', (request, response) => {
 })
 
 
-router.get('/report', (request, response) => {
-    if (request.session.sites) {
-        response.json(request.session.sites);
+router.get('/report', async (request, response) => {
+    const {session} = await models.getOrCreateCookieSession(request.sessionID);;
+
+    if ('sites' in session) {
+        response.json(session.sites);
     } else {
         response.send('We have no referer information for you');
     }
