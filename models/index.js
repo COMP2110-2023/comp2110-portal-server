@@ -163,25 +163,47 @@ const getOrCreateCookieSession = async (sessionID) => {
     sessionID
   );
   if (get) {
-    console.log("query result", get);
-      session = JSON.parse(get.data);
+    session = JSON.parse(get.data);
   }
-  console.log('GOCS', sessionID, session);
   return {sessionID, session};
 }
 
 
 const getCookieSession = async (sessionid) => {
-  console.log('getCookieSession', sessionid);
   const result = await db.get(
     "SELECT sessionid, data FROM cookiesessions WHERE sessionid=?",
     sessionid
   );
-  console.log('result', result);
   if (result) {
     return JSON.parse(result.data);
   } else {
     console.log("no session for ", sessionid);
+  }
+}
+
+const cookieSessionReport = async () => {
+  const result = await db.all("SELECT sessionid, data FROM cookiesessions");
+  if (result) {
+    // need to parse all of the data JSON
+    const report = {};
+    result.map((entry) => {
+      if (entry.data) {
+        const data = JSON.parse(entry.data);
+        if ('sites' in data) {
+          for (url in data.sites) {
+                        if (url in report) {
+              const {users, views} = report[url]
+              report[url] = {users: users+1, views: views + data.sites[url]};
+            } else {
+              report[url] = {users: 1, views: data.sites[url]};
+            }
+          }
+        }
+      }
+    });
+    return report;
+  } else {
+    return []
   }
 }
 
@@ -211,5 +233,6 @@ module.exports = {
   getPosts,
   getOrCreateCookieSession,
   getCookieSession,
-  updateCookieSession
+  updateCookieSession,
+  cookieSessionReport
 }

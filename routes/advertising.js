@@ -42,7 +42,7 @@ router.get('/', async (request, response) => {
 })
 
 
-router.get('/report', async (request, response) => {
+router.get('/tracker', async (request, response) => {
     const {session} = await models.getOrCreateCookieSession(request.sessionID);;
 
     if ('sites' in session) {
@@ -50,6 +50,11 @@ router.get('/report', async (request, response) => {
     } else {
         response.send('We have no referer information for you');
     }
+})
+
+router.get('/report', async (request, response) => {
+    const report = await models.cookieSessionReport();
+    response.json(report);
 })
 
 module.exports = router
