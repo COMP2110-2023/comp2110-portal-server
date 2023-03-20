@@ -53,8 +53,24 @@ const createTables = async () => {
     creator TEXT,
     FOREIGN KEY(creator) REFERENCES users(username)
   )`);
+
+  await db.exec(`CREATE TABLE IF NOT EXISTS tasks (
+      text TEXT,
+      status TEXT,
+      timestamp INTEGER,
+      creator TEXT,
+      FOREIGN KEY(creator) REFERENCES users(username)
+    )`);
 }
 
+
+const clearTables = async () => {
+  await db.run('DELETE FROM users');
+  await db.run('DELETE FROM sessions');
+  await db.run('DELETE FROM cookiesessions');
+  await db.run('DELETE FROM posts');
+  await db.run('DELETE FROM tasks');
+}
 
 const createUser = async (userinfo) => {
 
@@ -216,11 +232,63 @@ const updateCookieSession = async (sessionid, data) => {
   )
 }
 
+
+const createTask = async (creator, text) => {
+  const timestamp = Date.now()
+  const result = await db.run(
+    'INSERT INTO tasks (text, timestamp, creator, status) VALUES (?, ?, ?, ?)',
+    text, timestamp, creator, 'pending'
+  );
+  return result.lastID;
+}
+
+const getTasks = async (username, count) => {
+  const result = await db.all(
+    `SELECT rowid as id, text, status, timestamp
+    FROM tasks
+    WHERE creator=?
+    ORDER BY timestamp
+    LIMIT ?`,
+    username, count)
+  if (!result) {
+    return []
+  }
+  return result;
+}
+
+const updateTask = async (creator, id, status) => {
+  // check that creator owns the task
+  const check = await db.get(
+      'SELECT rowid as id FROM tasks WHERE rowid=? AND creator=?',
+      id, creator);
+  console.log("Check: ", check);
+  if (!check) {
+    return null;
+  }
+
+  console.log('updating task', id, status);
+  const result = await db.run(
+    'UPDATE tasks SET status=? WHERE rowid=?',
+    status, id
+  ); 
+  console.log('done update', result);
+  return result.lastID;
+}
+
+const getTask = async (username, id) => {
+  const result = await db.get(
+    'SELECT rowid as id, text, status, timestamp, creator FROM tasks WHERE rowid=? AND creator=?',
+    id, username)
+  return result;
+}
+
+
 module.exports = { 
   DB_DIR,
   initDB, 
   closeDB,
   createTables, 
+  clearTables,
   createUser, 
   createSession, 
   getUser, 
@@ -234,5 +302,9 @@ module.exports = {
   getOrCreateCookieSession,
   getCookieSession,
   updateCookieSession,
-  cookieSessionReport
+  cookieSessionReport,
+  createTask,
+  updateTask,
+  getTask,
+  getTasks,
 }
