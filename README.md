@@ -4,7 +4,7 @@ This repository implements the server side of a portal application.
 It provides authentication, an advertising server and a blog application
 that can be used as part of a front-end web portal. 
 
-The application is written using Express and uses a MongoDB database
+The application is written using Express and uses a SQLite database
 to store data.
 
 ## Running
