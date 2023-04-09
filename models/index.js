@@ -76,10 +76,15 @@ const createUser = async (userinfo) => {
 
   const user = await getUser(userinfo.username);
   if (user) {
-    console.log('user exists', userinfo.username);
-    return user.id;
+    console.log('user exists', userinfo.username, 'updating password');
+    // update the password
+    const hash = await bcrypt.hash(userinfo.password, config.saltRounds)
+    const result = await db.run(
+      "UPDATE users SET password=? WHERE username=?",
+      hash, user.username
+    )
+    return result.lastID;
   }
-
   const hash = await bcrypt.hash(userinfo.password, config.saltRounds)
   const result = await db.run(
     'INSERT INTO users (username, name, password) VALUES (?, ?, ?)',
