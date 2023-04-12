@@ -79,8 +79,8 @@ with `new Date(timestamp)`.  Creator username and name are included for convenie
 displaying the blog post.
 
 By default, this will return up to 10 posts. The query parameters `count` and
-`start` can be used to get a subset of posts.  For example `/posts?count=3` will
-return three posts, `/posts?start=5&count=3`
+`start` can be used to get a subset of posts.  For example `/blog?count=3` will
+return three posts, `/blog?start=5&count=3`
 will return three posts starting at the fifth (the `start` index starts at 1).
 
 `GET /blog/:id` - get one blog post given it's id.  Returns the same format as
