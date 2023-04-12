@@ -31,6 +31,9 @@ const getPosts = async (request, response) => {
     if (number < 1) {
         number = 1;
     }
+    if (number > 100) {
+        number = 100;
+    }
     const posts = await models.getPosts(start, number); 
     response.json({posts});
 }
