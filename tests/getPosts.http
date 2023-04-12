@@ -1,1 +1,1 @@
-GET http://localhost:8102/blog/
+GET http://localhost:8102/blog?start=1&count=2

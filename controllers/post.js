@@ -21,9 +21,18 @@ const createPost = async (request, response) => {
 }
 
 const getPosts = async (request, response) => {
- 
-        const posts = await models.getPosts(10); 
-        response.json({posts});
+
+    let start = parseInt(request.query.start) || 1;
+    let number = parseInt(request.query.count) || 10;
+
+    if (start < 1) {
+        start = 1;
+    }
+    if (number < 1) {
+        number = 1;
+    }
+    const posts = await models.getPosts(start, number); 
+    response.json({posts});
 }
 
 const getPost = async (request, response) => {

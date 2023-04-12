@@ -79,7 +79,12 @@ interpreted as Markdown (see https://marked.js.org/ for a suitable JS library). 
 with `new Date(timestamp)`.  Creator username and name are included for convenience in
 displaying the blog post.
 
-`GET /blog/:id` - get one blog post given it's id.  Returns the same format as 
+By default, this will return up to 10 posts. The query parameters `count` and
+`start` can be used to get a subset of posts.  For example `/posts?count=3` will
+return three posts, `/posts?start=5&count=3`
+will return three posts starting at the fifth (the `start` index starts at 1).
+
+`GET /blog/:id` - get one blog post given it's id.  Returns the same format as
 the list of posts above, just one of them.
 
 `POST /blog` - creates a new blog post. Requires authorisation (see above).  Request

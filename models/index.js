@@ -11,7 +11,7 @@ const DB_DIR = process.env.DB_DIR ? process.env.DB_DIR : '.';
 
 const initDB = async () => {
   // open the database
-  console.log('opening database at:', DB_DIR + '/database.db');
+  // console.log('opening database at:', DB_DIR + '/database.db');
   db = await open({
     filename: DB_DIR + '/database.db',
     driver: sqlite3.Database
@@ -90,7 +90,7 @@ const createUser = async (userinfo) => {
     'INSERT INTO users (username, name, password) VALUES (?, ?, ?)',
     userinfo.username, userinfo.name, hash
     )
-  console.log('user created', userinfo.username);
+  // console.log('user created', userinfo.username);
   return result.lastID;
 }
 
@@ -145,18 +145,18 @@ const createPost = async (title, content, creator) => {
   return result.lastID;
 }
 
-const getPosts = async (count) => {
+const getPosts = async (start, count) => {
   const result = await db.all(
     `SELECT posts.rowid as id, title, content, timestamp, creator, users.name
     FROM posts, users
     WHERE posts.creator=users.username
     ORDER BY timestamp
     LIMIT ?`,
-    count)
+    count + start)
   if (!result) {
     return []
   }
-  return result;
+  return result.slice(start-1, start+count-1)
 }
 
 const getPost = async (id) => {
