@@ -152,7 +152,7 @@ const getPosts = async (start, count) => {
     WHERE posts.creator=users.username
     ORDER BY timestamp
     LIMIT ?`,
-    count + start)
+    start+count-1)
   if (!result) {
     return []
   }
