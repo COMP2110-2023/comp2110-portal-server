@@ -73,8 +73,7 @@ Authorization: Basic 167fa0eb-a8ba-450c-b967-95fca3991b09
 }
 ```
 
-The blog post record consists mainly of a title and the content.  Content should be
-interpreted as Markdown (see https://marked.js.org/ for a suitable JS library). The 
+The blog post record consists mainly of a title and the content.  The
 `timestamp` field is a millisecond count suitable for creating a Javascript date
 with `new Date(timestamp)`.  Creator username and name are included for convenience in
 displaying the blog post.
