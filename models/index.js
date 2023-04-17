@@ -150,7 +150,7 @@ const getPosts = async (start, count) => {
     `SELECT posts.rowid as id, title, content, timestamp, creator, users.name
     FROM posts, users
     WHERE posts.creator=users.username
-    ORDER BY timestamp
+    ORDER BY timestamp DESC
     LIMIT ?`,
     count + start)
   if (!result) {
