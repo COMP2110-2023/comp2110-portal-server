@@ -19,15 +19,22 @@ const createTask = async (request, response) => {
     }
 }
 
-const getTasks = async (request, response) => {
-    const user = await auth.validUser(request)
 
-    if (user) {
-        const tasks = await models.getTasks(user.username, 10); 
-        response.json({tasks});
-    } else {
-        response.sendStatus(401);
+const getTasks = async (request, response) => {
+
+    const creator = await auth.validUser(request)
+
+    let start = parseInt(request.query.start) || 1;
+    let number = parseInt(request.query.count) || 10;
+
+    if (start < 1) {
+        start = 1;
     }
+    if (number < 1) {
+        number = 1;
+    }
+    const tasks = await models.getTasks(creator.username, start, number); 
+    response.json({tasks});
 }
 
 const getTask = async (request, response) => {

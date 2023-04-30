@@ -37,7 +37,7 @@ describe('auth', () => {
                 token = response.body.token
             })
 
-        console.log('token', token);
+        // console.log('token', token);
 
         await api.post('/blog/')
             .send({title: 'Authorised Post', content: 'Test Post Content'})
@@ -74,7 +74,7 @@ describe('auth', () => {
             .expect(200)
             .expect(response => {
                 expect(response.body.posts.length).toBe(10)
-                expect(response.body.posts[0].title).toBe('Test Post 0')
+                expect(response.body.posts[0].title).toBe('Test Post 19')
             })
 
         // get 3 posts
@@ -82,7 +82,7 @@ describe('auth', () => {
             .expect(200)
             .expect(response => {
                 expect(response.body.posts.length).toBe(3)
-                expect(response.body.posts[0].title).toBe('Test Post 0')
+                expect(response.body.posts[0].title).toBe('Test Post 19')
             })
 
         // get 3 posts starting at 3
@@ -90,7 +90,7 @@ describe('auth', () => {
             .expect(200)
             .expect(response => {
                 expect(response.body.posts.length).toBe(3)
-                expect(response.body.posts[0].title).toBe('Test Post 2')
+                expect(response.body.posts[0].title).toBe('Test Post 17')
             })
 
         // non-integer values should be ignored
@@ -98,7 +98,7 @@ describe('auth', () => {
             .expect(200)
             .expect(response => {
                 expect(response.body.posts.length).toBe(10)
-                expect(response.body.posts[0].title).toBe('Test Post 0')
+                expect(response.body.posts[0].title).toBe('Test Post 19')
             })
     });
 

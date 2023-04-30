@@ -247,18 +247,18 @@ const createTask = async (creator, text) => {
   return result.lastID;
 }
 
-const getTasks = async (username, count) => {
+const getTasks = async (username, start, count) => {
   const result = await db.all(
     `SELECT rowid as id, text, status, timestamp
     FROM tasks
     WHERE creator=?
-    ORDER BY timestamp
+    ORDER BY timestamp DESC
     LIMIT ?`,
-    username, count)
+  username, start + count);
   if (!result) {
     return []
   }
-  return result;
+  return result.slice(start-1, start+count-1);
 }
 
 const updateTask = async (creator, id, status) => {
@@ -271,12 +271,10 @@ const updateTask = async (creator, id, status) => {
     return null;
   }
 
-  console.log('updating task', id, status);
   const result = await db.run(
     'UPDATE tasks SET status=? WHERE rowid=?',
     status, id
   ); 
-  console.log('done update', result);
   return result.lastID;
 }
 

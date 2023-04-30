@@ -79,6 +79,62 @@ describe('tasks', () => {
     });
 
 
+    test('get tasks', async () => {
+        let token;
+        await api.post('/users/login')
+            .send({username: 'bobalooba', password: 'bob'})
+            .expect(response => {
+                token = response.body.token
+            })
+
+        for (let index = 0; index < 20; index++) {
+            
+            await api.post('/tasks')
+                .send({text: 'Test Task ' + index})
+                .set('Authorization', `basic ${token}`)
+                .expect(200)
+                .expect(response => {
+                    expect(response.body.status).toBe('success');
+                })
+        }
+
+        // get some tasks
+        await api.get('/tasks')
+            .expect(200)
+            .set('Authorization', `basic ${token}`)
+            .expect(response => {
+                expect(response.body.tasks.length).toBe(10)
+                expect(response.body.tasks[0].text).toBe('Test Task 19')
+            })
+
+        // get 3 tasks
+        await api.get('/tasks?count=3')
+            .expect(200)
+            .set('Authorization', `basic ${token}`)
+            .expect(response => {
+                expect(response.body.tasks.length).toBe(3)
+                expect(response.body.tasks[0].text).toBe('Test Task 19')
+            })
+
+        // get 3 tasks starting at 3
+        await api.get('/tasks?count=3&start=3')
+            .expect(200)
+            .set('Authorization', `basic ${token}`)
+            .expect(response => {
+                expect(response.body.tasks.length).toBe(3)
+                expect(response.body.tasks[0].text).toBe('Test Task 17')
+            })
+
+        // non-integer values should be ignored
+        await api.get('/tasks?count=cat&start=blob')
+            .expect(200)
+            .set('Authorization', `basic ${token}`)
+            .expect(response => {
+                expect(response.body.tasks.length).toBe(10)
+                expect(response.body.tasks[0].text).toBe('Test Task 19')
+            })
+    });
+
     afterAll(() => {
         models.closeDB();
     })
