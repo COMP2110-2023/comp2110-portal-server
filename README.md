@@ -120,6 +120,12 @@ The task has two parts, the text is the task description, the status is initiali
 to 'pending' but can be updated to any string via a POST request (below).  The timestamp
 shows the creation time of the task. Tasks are returned most recent first.
 
+By default, this will return up to 10 tasks. The query parameters `count` and
+`start` can be used to get a subset of tasks.  For example `/tasks?count=3` will
+return three tasks, `/tasks?start=5&count=3`
+will return three tasks starting at the fifth (the `start` index starts at 1).
+
+
 `POST /tasks` - create a new task.  Requires authorisation. The request body should
 contain the task text:
 
